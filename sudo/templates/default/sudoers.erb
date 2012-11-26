@@ -1,0 +1,33 @@
+########################################################################
+### NOTICE: this file managed by chef; changes made here will be lost.
+########################################################################
+
+Defaults logfile=/var/log/sudo.log
+Defaults log_host
+
+root		ALL=(ALL) ALL
+
+# static entries
+nagios    ALL=NOPASSWD: /usr/sbin/lsof,/usr/lib/hadoop/bin/hadoop,/usr/bin/hadoop,/usr/local/sbin/get-dfsreport.sh,/usr/lib64/nagios/plugins/check_nfs_server,/sbin/service * restart,/sbin/service * status
+
+Cmnd_Alias  SUDOSH = /usr/local/bin/sudosh
+Cmnd_Alias  NSHELLS = /bin/sh,/bin/bash
+Cmnd_Alias  NSU = /bin/su
+
+# operations team
+%ops	ALL=(ALL)       NOPASSWD: ALL
+%ops	ALL=NOPASSWD: SUDOSH
+ec2-user	ALL=NOPASSWD: SUDOSH
+
+#<% if node[:app_environment] == "beta" %>
+#%dev	ALL=/usr/sbin/tshark, /usr/bin/tail, /bin/cat, /usr/bin/find, /bin/echo, /usr/bin/less
+#%beta_leads	ALL=/sbin/reboot, /sbin/shutdown -r now
+#aleks	 ALL=ALL,!NSHELLS,!NSU
+#aleks ALL=(ALL) ALL
+#<% end %>
+
+#<% if node[:roles].include? "qaperms" %>
+#%qa		ALL=(ALL) ALL
+#%qa	         ALL=ALL,!NSHELLS,!NSU
+#<% end %>
+
